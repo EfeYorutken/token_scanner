@@ -1,8 +1,22 @@
 package main
 
 import (
-	//	"fmt"
 )
+
+func ternary[T any](cond bool, if_true T, if_false T)T{
+	if cond{
+		return if_true
+	}
+	return if_false
+}
+
+func string_to_int(s string) int{
+	res := 0
+	for i := 0; i < len(s); i++{
+		res = res*10 + int(s[i] - '0')
+	}
+	return res
+}
 
 func get_cli_arguments()[]string{
 	return []string{"-p", "-r", "-t"}
@@ -44,51 +58,3 @@ func contains[T comparable	](arr []T, val T)bool{
 	return false
 }
 
-func get_indicies_of_args(args []string)[]int{
-	var res []int
-	cli_arguments := get_cli_arguments()
-	for i := 0; i < len(args); i++{
-		if contains(cli_arguments, args[i]){
-			res = append(res, i)
-		}
-	}
-	return res
-}
-
-func get_args_and_responsibilities(args []string)[][]string{
-	var res [][]string
-	indicies := get_indicies_of_args(args)
-	for i := 0; i < len(indicies)-1; i++{
-		to_parse := push(args[indicies[i]+1:indicies[i+1]], args[indicies[i]])
-		res = append(res, to_parse)
-	}
-	last_index := len(indicies) - 1
-	to_parse := push(args[indicies[last_index]+1:], args[indicies[last_index]])
-	res = append(res, to_parse)
-	return res
-}
-
-func execute_tool(args []string)[]string{
-	coms := get_args_and_responsibilities(args)
-	target_name := args[0]
-	target := NewTarget(target_name, nil, nil)
-
-	//this one can be done much better
-	for i := 0; i < len(coms); i++{
-		command := coms[i][0]
-		switch command{
-		case "-p"	:
-			target.ports = map_to(coms[i][1:], string_to_int)
-		case "-r":
-			upper := string_to_int(coms[i][1])
-			lower := string_to_int(coms[i][0])
-			for i := lower; i < upper+1; i++{
-				target.ports = append(target.ports, i)
-			}
-		case "-t":
-			target.protocols = coms[i][1:]
-		}
-	}
-
-	return target.ScanAddressOnPorts()
-}

@@ -14,7 +14,8 @@ type Target struct {
 } 
 
 func scan_address_on_port(target string, port int, protocol string) string{
-	connection, err := net.DialTimeout(protocol, target + ":" + strconv.Itoa(port), 60 * time.Second)
+	target_link := target + ":" + strconv.Itoa(port)
+	connection, err := net.DialTimeout(protocol, target_link, 60 * time.Second)
 
 	if err == nil{
 		connection.Close()
@@ -23,21 +24,25 @@ func scan_address_on_port(target string, port int, protocol string) string{
 		return fmt.Sprintf("FAILED SCAN ON %s:%d with %s", target, port, protocol)
 }
 
-func  NewTarget(n string, p []int, prot []string) Target{
-	name := n
+func (t Target) get_target_w_ports(ps []int) Target{
 	var ports []int
-	var protocols []string
-	if p == nil{
-		for i := 1; i < 100; i++{
+	if ps == nil{
+		for i := 1; i < 1000; i++{
 			ports = append(ports, i)
 		}
 	}else{
-		ports = p
+		ports = ps
 	}
-	if prot == nil{
-		protocols = append(protocols, "tcp")
-	}
-	return Target{name, ports, protocols}
+	return Target{t.name, ports, t.protocols}
+}
+
+func (t Target) get_target_w_protocols(prots []string) Target{
+	protocols := ternary(prots == nil, []string{"tcp"}, prots)
+	return Target{t.name, t.ports, protocols}
+}
+
+func NewTarget(n string, p []int, prot []string) Target{
+	return Target{n,nil,nil}.get_target_w_ports(p).get_target_w_protocols(prot)
 }
 
 func (target Target)ScanAddressOnPorts() []string{
@@ -50,15 +55,6 @@ func (target Target)ScanAddressOnPorts() []string{
 		for _,prot := range prots{
 		res = append(res, scan_address_on_port(target_name, ports[i], prot))
 		}
-	}
-	return res
-}
-
-//might be redundent
-func ScanAddressOnRange(target_name string, begin_port int, end_port int) []string{
-	var res []string
-	for port := begin_port; port <= end_port ; port++{
-		res = append(res, scan_address_on_port(target_name, port, "tcp"))
 	}
 	return res
 }
