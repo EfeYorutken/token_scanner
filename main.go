@@ -5,8 +5,8 @@ import (
 )
 
 func main(){
-		res := ScanFromFile("test.txt")
-		for _, r := range res{
-			fmt.Println(r)
-		}
+	test := "hello there"
+	for _, c := range test{
+		fmt.Println(c)
+	}
 }
