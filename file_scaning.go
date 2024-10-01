@@ -25,7 +25,7 @@ func lines_to_targets(lines []string)[]Target{
 			line := lines[i]
 			split_line := strings.Split(line, " ")
 			target_name := split_line[0]
-			port := string_to_int(split_line[1])
+			port :=split_line[1]
 			protocol := string(split_line[2])
 
 			
@@ -48,7 +48,7 @@ func lines_to_targets(lines []string)[]Target{
 				temp[target_name] = NewTarget(target_name, new_ports, new_protocols)
 
 			}else{
-				temp[target_name] = NewTarget(target_name, []int{port}, []string{protocol})
+				temp[target_name] = NewTarget(target_name, []string{port}, []string{protocol})
 			}
 		}
 	}

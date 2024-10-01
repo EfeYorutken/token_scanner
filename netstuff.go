@@ -9,7 +9,7 @@ import (
 
 type Target struct {
 	name string
-	ports []int
+	ports []string
 	protocols []string
 } 
 
@@ -24,24 +24,25 @@ func scan_address_on_port(target string, port int, protocol string) string{
 		return fmt.Sprintf("FAILED SCAN ON %s:%d with %s", target, port, protocol)
 }
 
-func (t Target) get_target_w_ports(ps []int) Target{
-	var ports []int
+func (t Target) get_target_w_ports(ps []string) Target{
+	var ports []string
 	if ps == nil{
 		for i := 1; i < 1000; i++{
-			ports = append(ports, i)
+			//write itoa
+			ports = append(ports, strconv.Itoa(i))
 		}
 	}else{
-		ports = ps
+		ports = append(t.ports, ps...)
 	}
 	return Target{t.name, ports, t.protocols}
 }
 
 func (t Target) get_target_w_protocols(prots []string) Target{
-	protocols := ternary(prots == nil, []string{"tcp"}, prots)
+	protocols := ternary(prots == nil, []string{"tcp"}, append(t.ports, prots...))
 	return Target{t.name, t.ports, protocols}
 }
 
-func NewTarget(n string, p []int, prot []string) Target{
+func NewTarget(n string, p []string, prot []string) Target{
 	return Target{n,nil,nil}.get_target_w_ports(p).get_target_w_protocols(prot)
 }
 
@@ -53,7 +54,7 @@ func (target Target)ScanAddressOnPorts() []string{
 	var res []string
 	for i := 0; i < len(ports); i++{
 		for _,prot := range prots{
-		res = append(res, scan_address_on_port(target_name, ports[i], prot))
+		res = append(res, scan_address_on_port(target_name, string_to_int(ports[i]), prot))
 		}
 	}
 	return res

@@ -5,8 +5,9 @@ import (
 )
 
 func main(){
-	test := "hello there"
-	for _, c := range test{
-		fmt.Println(c)
+	target_addres := "scanme.nmap.org"
+	target := NewTarget(target_addres, nil, nil)
+	for _, i := range target.ScanAddressOnPorts(){
+		fmt.Println(i)
 	}
 }
