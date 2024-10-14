@@ -1,5 +1,9 @@
 package main
 
+import(
+	"strconv"
+)
+
 func get_indicies_of_args(args []string)[]int{
 	var res []int
 	cli_arguments := get_cli_arguments()
@@ -32,14 +36,14 @@ func execute_tool(args []string)[]string{
 	//this one can be done much better
 	for _, to_parse := range coms{
 		if to_parse[0] == "-p"{
-			target.ports = map_to(to_parse[1:], string_to_int)
+			target.ports = to_parse[1:]
 		}
 		if to_parse[0] == "-r"{
-			lower := string_to_int(to_parse[1:][0])
-			upper := string_to_int(to_parse[1:][1])
-			var prts_t_scn []int
+			lower, _ := strconv.Atoi(to_parse[1:][0])
+			upper, _ := strconv.Atoi(to_parse[1:][1])
+			var prts_t_scn []string
 			for port := lower; port <= upper; port++{
-				prts_t_scn = append(prts_t_scn, port)
+				prts_t_scn = append(prts_t_scn, strconv.Itoa(port))
 			}
 			target.ports = prts_t_scn
 		}

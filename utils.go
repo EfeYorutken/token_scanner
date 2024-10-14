@@ -10,14 +10,6 @@ func ternary[T any](cond bool, if_true T, if_false T)T{
 	return if_false
 }
 
-func string_to_int(s string) int{
-	res := 0
-	for i := 0; i < len(s); i++{
-		res = res*10 + int(s[i] - '0')
-	}
-	return res
-}
-
 func get_cli_arguments()[]string{
 	return []string{"-p", "-r", "-t"}
 }
