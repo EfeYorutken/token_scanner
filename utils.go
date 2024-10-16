@@ -10,10 +10,6 @@ func ternary[T any](cond bool, if_true T, if_false T)T{
 	return if_false
 }
 
-func get_cli_arguments()[]string{
-	return []string{"-p", "-r", "-t"}
-}
-
 func push[T any](arr []T, val T) []T{
 	res := []T{val}
 	for i := 0; i < len(arr); i++{

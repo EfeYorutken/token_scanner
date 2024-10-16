@@ -59,13 +59,8 @@ func lines_to_targets(lines []string)[]Target{
 	return res
 }
 
-func ScanFromFile(filename string)[]string{
+func GetTargetsFromFile(filename string)[]Target{
 	file_content := get_file_content(filename)
 	lines := strings.Split(file_content, "\n")
-	targets := lines_to_targets(lines)
-	var res []string
-	for _, target := range targets{
-		res = append(res, target.ScanAddressOnPorts()...)
-	}
-	return res
+	return lines_to_targets(lines)
 }

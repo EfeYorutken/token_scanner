@@ -1,56 +1,54 @@
 package main
 
 import(
-	"strconv"
 )
 
+func get_cli_arguments()[]string{
+	return []string{"-p", "-r", "-t", "-sG", "-sB", "-s", "f"}
+}
+
 func get_indicies_of_args(args []string)[]int{
-	var res []int
+	var indicies []int
 	cli_arguments := get_cli_arguments()
 	for i := 0; i < len(args); i++{
 		if contains(cli_arguments, args[i]){
-			res = append(res, i)
+			indicies = append(indicies, i)
 		}
 	}
-	return res
+	return indicies
 }
 
-func get_args_and_responsibilities(args []string)[][]string{
-	var res [][]string
-	indicies := get_indicies_of_args(args)
-	for i := 0; i < len(indicies)-1; i++{
-		to_parse := push(args[indicies[i]+1:indicies[i+1]], args[indicies[i]])
-		res = append(res, to_parse)
-	}
-	last_index := len(indicies) - 1
-	to_parse := push(args[indicies[last_index]+1:], args[indicies[last_index]])
-	res = append(res, to_parse)
-	return res
-}
+func GetArgsAndResponsibilities(args []string)[][]string{
+	var args_and_resps [][]string
 
-func execute_tool(args []string)[]string{
-	coms := get_args_and_responsibilities(args)
-	target_name := args[0]
-	target := NewTarget(target_name, nil, nil)
 
-	//this one can be done much better
-	for _, to_parse := range coms{
-		if to_parse[0] == "-p"{
-			target.ports = to_parse[1:]
-		}
-		if to_parse[0] == "-r"{
-			lower, _ := strconv.Atoi(to_parse[1:][0])
-			upper, _ := strconv.Atoi(to_parse[1:][1])
-			var prts_t_scn []string
-			for port := lower; port <= upper; port++{
-				prts_t_scn = append(prts_t_scn, strconv.Itoa(port))
-			}
-			target.ports = prts_t_scn
-		}
-		if to_parse[0] == "-t"{
-			target.protocols = to_parse[1:]
-		}
+	arg_indicies := get_indicies_of_args(args)
+
+	for i := 0; i < len(arg_indicies)-1; i++{
+
+
+		arg_index := arg_indicies[i]
+		next_arg_index := arg_indicies[i+1]
+
+
+		arg := args[arg_index]
+
+		resposibilities := args[arg_index + 1 : next_arg_index]
+
+		arg_and_resp := push(resposibilities, arg)
+
+		args_and_resps = append(args_and_resps, arg_and_resp)
 	}
 
-	return target.ScanAddressOnPorts()
+	last_arg_index := arg_indicies[len(arg_indicies) - 1]
+	last_statement := args[last_arg_index : ]
+
+	last_arg := last_statement[0]
+	last_responsibility := last_statement[1:]
+
+	last_arg_and_resp := push(last_responsibility, last_arg)
+
+	args_and_resps = append(args_and_resps, last_arg_and_resp)
+
+	return args_and_resps
 }
