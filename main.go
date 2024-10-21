@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
 func main(){
@@ -18,22 +19,27 @@ func main(){
 
 	var script_path string
 
+
 	for _, a_and_r := range args_and_responsibilities{
 		arg := a_and_r[0]
 		resp := a_and_r[1:]
 
 		switch(arg){
 		case "-p"://ports
-			targets[len(targets) - 1] = targets[len(targets) - 1].get_target_w_ports(resp)
+			targets[len(targets) - 1].ports = append(targets[len(targets) - 1].ports, resp...)
 			break
 		case "-r"://range of ports
-			targets[len(targets) - 1] = targets[len(targets) - 1].get_target_w_ports(resp)
+			begin,_ := strconv.Atoi(resp[0])
+			end,_ := strconv.Atoi(resp[1])
+			for i := begin; i < end; i++{
+				targets[len(targets) - 1] = targets[len(targets) - 1].get_target_w_ports([]string{strconv.Itoa(i)})
+			}
 			break
 		case "-sG"://script when successfull scan
 			run_good_script = true
 			script_path = resp[1]
 			break
-		case "-sB"://script when successfull scan
+		case "-sB"://script when unsuccessfull scan
 			run_bad_script = true
 			script_path = resp[1]
 			break
@@ -46,15 +52,16 @@ func main(){
 			targets = append(targets, GetTargetsFromFile(resp[0])...)
 			break
 		case "-t"://type of protocol
-			targets[len(targets) - 1] = targets[len(targets) - 1].get_target_w_protocols(resp)
+			targets[len(targets) - 1].protocols = append(targets[len(targets) - 1].protocols, resp...)
 			break
 		}
 
 	}
 
 	//should be doable with map_to
-	for _, t := range targets{
+	for i, t := range targets{
 		results = append(results, t.ScanAddressOnPorts()...)
+		fmt.Printf("scanning target %v which is %v\n", i, t)
 	}
 
 	if run_bad_script && !run_good_script{

@@ -29,8 +29,8 @@ func scan_address_on_port(target string, port string, protocol string) string{
 func (t Target) get_target_w_ports(ps []string) Target{
 	var ports []string
 	if ps == nil{
-		for i := 1; i < 1000; i++{
-			//write itoa
+		//CHANGE
+		for i := 1; i < 10; i++{
 			ports = append(ports, strconv.Itoa(i))
 		}
 	}else{
