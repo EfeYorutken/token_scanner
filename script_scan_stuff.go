@@ -34,8 +34,6 @@ func IfSuccess(results []string, command_that_runs_the_script string){
 
 
 		current_result := result_from_text(result)
-		//should probably determine the shell to be used dynamically
-		//alternatively different versions of script_scan_stuff for different OSs can exist but seems ugly
 
 		if current_result.successfull{
 			arr := strings.Split(command_that_runs_the_script," ")
@@ -64,8 +62,6 @@ func IfNotSuccess(results []string, command_that_runs_the_script string){
 
 
 		current_result := result_from_text(result)
-		//should probably determine the shell to be used dynamically
-		//alternatively different versions of script_scan_stuff for different OSs can exist but seems ugly
 
 		if !current_result.successfull{
 			arr := strings.Split(command_that_runs_the_script," ")
@@ -95,8 +91,6 @@ func EitherWay(results []string, command_that_runs_the_script string){
 
 
 		current_result := result_from_text(result)
-		//should probably determine the shell to be used dynamically
-		//alternatively different versions of script_scan_stuff for different OSs can exist but seems ugly
 
 		arr := strings.Split(command_that_runs_the_script," ")
 		cmd := exec.Command(arr[0],arr[1], current_result.address, current_result.port, current_result.protocol)

@@ -1,0 +1,8 @@
+scanme.nmap.org 79 tcp
+scanme.nmap.org 79 udp
+
+scanme.nmap.org 80 tcp
+scanme.nmap.org 80 udp
+
+scanme.nmap.org 81 tcp
+scanme.nmap.org 81 udp

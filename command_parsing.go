@@ -1,10 +1,11 @@
 package main
 
 import(
+//	"fmt"
 )
 
 func get_cli_arguments()[]string{
-	return []string{"-p", "-r", "-t", "-sG", "-sB", "-s", "f"}
+	return []string{"-p", "-r", "-t", "-sG", "-sB", "-s", "-f"}
 }
 
 func get_indicies_of_args(args []string)[]int{
@@ -23,6 +24,7 @@ func GetArgsAndResponsibilities(args []string)[][]string{
 
 
 	arg_indicies := get_indicies_of_args(args)
+
 
 	for i := 0; i < len(arg_indicies)-1; i++{
 
