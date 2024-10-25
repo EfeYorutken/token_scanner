@@ -32,6 +32,12 @@ func main(){
 	$> token_scanner -sB command_that_runs_script
 	same as -sG but for unsuccessful scans
 
+-f : file
+	$> token_scanner -f file_name
+	reads the targgets from file_name and scans them
+	the targets must be represented in the format of address port protocol
+	if you want the default values for port or protocol, put a * charcter
+
 -s : script
 	$> token_scanner -s command_that_runs_script
 	same as -sG but for all scans regardless of success
@@ -44,7 +50,7 @@ func main(){
 	var targets []Target
 	var results []string
 
-	targets = append(targets, Target{os.Args[1],nil,nil})
+	targets = append(targets, Target{os.Args[1],[]string{},[]string{}})
 
 	run_good_script := false
 	run_bad_script := false
@@ -54,6 +60,9 @@ func main(){
 	var script_runner_bad string
 	var script_runner_both string
 
+	if(targets[0].name == "-f"){
+		targets = []Target{}
+	}
 
 	for _, a_and_r := range args_and_responsibilities{
 		arg := a_and_r[0]
@@ -98,10 +107,10 @@ func main(){
 
 	targets = map_to(targets, func(t Target)Target{
 		if(len(t.ports) == 0){
-			return t.get_target_w_ports(nil)
+			t = t.get_target_w_ports(nil)
 		} 
 		if(len(t.protocols) == 0){
-			return t.get_target_w_protocols(nil)
+			t = t.get_target_w_protocols(nil)
 		}
 		return t
 	})

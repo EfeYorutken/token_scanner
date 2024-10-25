@@ -1,9 +1,5 @@
 package main
 
-import(
-//	"fmt"
-)
-
 func get_cli_arguments()[]string{
 	return []string{"-p", "-r", "-t", "-sG", "-sB", "-s", "-f"}
 }
@@ -19,12 +15,18 @@ func get_indicies_of_args(args []string)[]int{
 	return indicies
 }
 
+//returns a 2d slice where each element is a slice of strings
+//first element of each string slice is the cli argument and the rest are the
+//parameters of this argument
 func GetArgsAndResponsibilities(args []string)[][]string{
 	var args_and_resps [][]string
 
 
 	arg_indicies := get_indicies_of_args(args)
 
+	if(len(arg_indicies) == 0){
+		return [][]string{}
+	}
 
 	for i := 0; i < len(arg_indicies)-1; i++{
 

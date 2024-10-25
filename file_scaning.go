@@ -16,7 +16,6 @@ func get_file_content(file_name string)string{
 }
 
 //file syntax should be target_name port protocol
-//for now
 func lines_to_targets(lines []string)[]Target{
 	var res []Target
 	for _, line := range lines{
@@ -26,11 +25,10 @@ func lines_to_targets(lines []string)[]Target{
 			line_arr := strings.Split(line, " ")
 
 			target_name := line_arr[0]
-			target_port := line_arr[1]
-			target_protocol := line_arr[2]
 
+			target_port := ternary(line_arr[1] == "*", "", line_arr[1])
+			target_protocol := ternary(line_arr[2] == "*", "", line_arr[2])
 
-			//might be in stdlib
 			target_names := map_to(res, func(target Target)string{
 				return target.name 
 			})
@@ -60,6 +58,17 @@ func lines_to_targets(lines []string)[]Target{
 
 		}
 	}
+
+	res = map_to(res, func(t Target) Target{
+		if(len(t.protocols[0]) == 0){
+			t = t.get_target_w_protocols(nil)
+		}
+		if(len(t.ports[0]) == 0){
+			t = t.get_target_w_ports(nil)
+		}
+		return t
+	})
+
 	return res
 }
 

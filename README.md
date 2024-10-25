@@ -45,3 +45,14 @@ You can call the binary file without any parameters to see the help menu
 - `-s <command that will run the script>`
     - stands for script
     - same as `-sG` but for all scans
+
+- `-f <file_path>`
+    - stands for file
+    - will read the targets spesified in the file `<file_path>`
+    - the targets in the `<file_path>` need to be specified as `<address> <port> <protocol>`
+    - if you want to use the default values for ports or protocols, use the `*` symbol instead of the value in the `file_path`
+
+## Default Values
+
+- if no ports are specified, the ports of each target will be defaulted to 1 to 1000
+- if no protocols are specified, the protocols of each target will be defaulted to tcp
